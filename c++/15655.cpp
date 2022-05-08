@@ -7,7 +7,6 @@ using namespace std;
 int n, m;
 vector<int> v;
 int arr[9];
-bool isVisited[9];
 
 void dfs(int num, int cnt){
   if(cnt == m){
@@ -18,12 +17,8 @@ void dfs(int num, int cnt){
     return;
   }
   for(int i=num; i<n; i++){
-    if(!isVisited[i]){
-      isVisited[i] = true;
-      arr[cnt] = v[i];
-      dfs(i+1, cnt+1);
-      isVisited[i] = false;
-    }
+    arr[cnt] = v[i];
+    dfs(i+1, cnt+1);
   }
 }
 

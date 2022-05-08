@@ -40,7 +40,6 @@ using namespace std;
 
 int n, m;
 int arr[9];
-bool isVisited[9] = {false,};
 
 void dfs(int num, int cnt){
   if(cnt==m){
@@ -51,12 +50,8 @@ void dfs(int num, int cnt){
     return;
   }
   for(int i=num; i<=n; i++){
-    if(!isVisited[i]){
-      isVisited[i] = true;
       arr[cnt]=i;
       dfs(i+1, cnt+1);
-      isVisited[i] = false;
-    }
   }
 }
 
