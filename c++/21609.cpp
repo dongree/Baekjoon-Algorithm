@@ -40,18 +40,18 @@ bool inRange(int y, int x) { return 0 <= y && y < N && 0 <= x && x < N; }
 
 bool searchBlockGroup() {
   groups.clear();
+  memset(isVisited, false, sizeof(isVisited));
 
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {
-      if (board[i][j] >= 1) {
-        memset(isVisited, false, sizeof(isVisited));
+      if (board[i][j] >= 1 && !isVisited[i][j]) {
         q.push({i, j});
         isVisited[i][j] = true;
         int num = board[i][j];
         int size = 1;
-        int rainbowCnt = 0;
         int criY = i;
         int criX = j;
+        vector<pair<int, int>> rainbow;
 
         while (!q.empty()) {
           int y = q.front().first;
@@ -64,9 +64,9 @@ bool searchBlockGroup() {
 
             if (inRange(ny, nx) && !isVisited[ny][nx] &&
                 (board[ny][nx] == num || board[ny][nx] == 0)) {
-              if (board[ny][nx] == 0)
-                rainbowCnt++;
-              else {
+              if (board[ny][nx] == 0) {
+                rainbow.push_back({ny, nx});
+              } else {
                 if (ny < criY || (ny == criY && nx < criX)) {
                   criY = ny;
                   criX = nx;
@@ -78,7 +78,15 @@ bool searchBlockGroup() {
             }
           }
         }
+        int rainbowCnt = rainbow.size();
+
         if (size >= 2) groups.push_back({size, rainbowCnt, criY, criX});
+
+        for (int i = 0; i < rainbow.size(); i++) {
+          int y = rainbow[i].first;
+          int x = rainbow[i].second;
+          isVisited[y][x] = false;
+        }
       }
     }
   }
@@ -179,8 +187,6 @@ void rotate() {
 }
 
 int main() {
-  freopen("example.txt", "r", stdin);
-
   cin >> N >> M;
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {
